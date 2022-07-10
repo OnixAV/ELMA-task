@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
-  <script src="./scripts.js"></script>
+  <script src="./scripts.js" defer></script>
   <title>ELMA - TASK</title>
 </head>
 
@@ -14,8 +14,10 @@
   <div class="container">
     <div class="head">
       <div class="slide-chart">
-        <button class="switch-btn">Left</button>
-        <button class="switch-btn">Right</button>
+        <input class="switch-btn" type="button" value="left" onclick="btnRight(true)">
+        <input class="switch-btn" type="button" value="right" onclick="btnRight(false)">
+        <!-- <button class="switch-btn">Left</button> -->
+        <!-- <button class="switch-btn">Right</button> -->
       </div>
       <div class="title-head">
         <p>BACKLOG</p>
@@ -23,13 +25,13 @@
     </div>
     <div class="wrap-flex">
       <div class="chart">
-        <div class="chart-row chart-period">
+        <div class="dates chart-row chart-period">
           <div class="chart-row-item"></div>
-          <span>27.06</span><span>28.06</span><span>29.06</span>
+          <!-- <span>27.06</span><span>28.06</span><span>29.06</span>
           <span>30.06</span><span>1.07</span><span>2.07</span>
           <span>3.07</span><span>4.07</span><span>5.07</span>
           <span>6.07</span><span>7.07</span><span>7.07</span>
-          <span>8.07</span><span>9.07</span><span>10.07</span>
+          <span>8.07</span><span>9.07</span><span>10.07</span> -->
         </div>
         <div class="chart-row chart-lines">
           <span></span><span></span><span></span>
@@ -86,7 +88,7 @@
         </div> -->
         <div class="wrap-back">
           <div class="search-list">
-            <input class="search-input" type="search" id="back-search" name="i" placeholder="Поиск...">
+            <input class="search-input" type="text" id="back-search" name="i" placeholder="Поиск...">
             <button>🔍</button>
           </div>
           <div class="back-list">

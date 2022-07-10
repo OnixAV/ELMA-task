@@ -5,32 +5,48 @@ let urlTasks =
 let arrUsers;
 let arrTasks;
 let backlog;
+let dateDelta = new Date();
+
+Date.prototype.addDays = function(days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+}
+
+function getDates(startDate, stopDate) {
+  var dateArray = new Array();
+  var currentDate = startDate;
+  while (currentDate <= stopDate) {
+      dateArray.push(new Date (currentDate));
+      currentDate = currentDate.addDays(1);
+  }
+  return dateArray;
+}
+
+function setDates(currentDate) {
+  let datesBlock = document.querySelector(".dates")
+  let stopDate = currentDate.addDays(14)
+  for (key of getDates(currentDate, stopDate)) {
+    let month = key.getMonth() + 1
+    datesBlock.innerHTML += `<span class="date-elem">${key.getDate() + '.' + (month < 10 ? '0' + month : month) }</span>`
+  }
+  console.log(datesBlock);
+}
+
+function btnRight (direction) {
+  let datesBlock = document.querySelector(".dates")
+  document.querySelectorAll(".date-elem").forEach((el) => {el.remove()})
+  dateDelta = direction ? dateDelta.addDays(-15) : dateDelta.addDays(15)
+  setDates(dateDelta)
+}
 
 async function getUsers() {
-  // fetch(urlUsers)
-  // .then((response) => {
-  //   return response.json()
-  // })
-  // .then((users) => {
-  //   return arrUsers = {...users}
-  // })
-  // .catch(function (error) {
-  //   console.log(error)
-  // })
-  // let response = await fetch(urlUsers)
-  // let content = await response.json()
-  // let key
-  // for (key in content) {
-  //   console.log(content[key])
-  // }
-
   let response = await fetch(urlUsers);
   arrUsers = await response.json();
   let key;
   let chart = document.querySelector(".chart")
 
   for (key in arrUsers) {
-    // console.log(arrUsers[key]);
     chart.innerHTML += `<div class="chart-row">
     <div class="chart-row-item">${arrUsers[key].firstName}</div>
     </div>`
@@ -40,31 +56,6 @@ async function getUsers() {
 }
 
 async function getTasks() {
-  // fetch(urlTasks)
-  //   .then((response) => {
-  //     arrTasks = response.json();
-  //   })
-  //   .then((tasks) => {
-  //     for (let i = 0; i < tasks.length; i++) {
-  //       arrUsers[i] = tasks[i]
-  //     }
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-
-  // fetch(urlTasks)
-  // .then((response) => {
-  //   return response.json()
-  // })
-  // .then((tasks) => {
-  //   return arrTasks = {...tasks}
-  //   // return console.log(arrUsers)
-  // })
-  // .catch(function (error) {
-  //   console.log(error)
-  // })
-
   let response = await fetch(urlTasks);
   arrTasks = await response.json();
   let key;
@@ -81,22 +72,26 @@ async function getTasks() {
     }
   }
 
-  let input = document.querySelector('#back-search');
-  input.oninput = function () {
-    let inputValue = this.value.trim();
-    // let list = document.querySelectorAll('p.back-title, p.back-subtitle')
-
-    console.log(inputValue)
-
-    if (inputValue != '') {
-      document.querySelectorAll('p.back-title').foreach(el => {
-        if (el.innerText.search(inputValue) == -1) {
-          el.classList.add("hide");
-          document.getElementById('#iter').style="display: none"
+  document.querySelector('#back-search').oninput = function () {
+    let val = this.value.trim()
+    let backSearchItems = document.querySelectorAll('.item-task')
+    // console.log(backSearchItems);
+    if (val != '') {
+      backSearchItems.forEach(function(el) {
+        if (el.innerText.toUpperCase().search(val.toUpperCase()) == -1) {
+          el.classList.add('hide')
         }
-      });
+        else {
+          el.classList.remove('hide')
+        }
+      })
     }
-  };
+    else {
+      backSearchItems.forEach(function(el) {
+        el.classList.remove('hide')
+      })
+    }
+  }
 
   console.log(backlist);
   // console.log(list);
@@ -135,8 +130,9 @@ async function getTasks() {
 // }
 
 // setTimeout(checkExecutor, 2000)
-
+setDates(dateDelta)
 getUsers()
-getTasks();
+getTasks()
+
 // checkExecutor()
 // console.log(arrTasks)
